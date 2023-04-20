@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+#frontendmentor files
+/front
+
 # next.js
 /.next/
 /out/
