@@ -3,42 +3,10 @@ import { Container } from "@/styles/main.styled";
 import Cards from "@/components/Cards";
 import { useState, useEffect } from "react";
 import AddComment from "@/components/AddComment";
-
-interface Comment {
-  id: number;
-  content: string;
-  createdAt: string;
-  score: number;
-  user: {
-    image: {
-      png: string;
-      webp: string;
-    };
-    username: string;
-  };
-  replies: Comment[];
-  replyingTo?: string;
-}
-
-interface CurrentUser {
-  image: {
-    png: string;
-  };
-  username: string;
-}
-
-interface Replies {
-  user: {
-    image: {
-      png: string;
-    };
-    username: string;
-  };
-}
+import { Comment } from "@/interface/interfaces";
 
 export default function Home() {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [replies, setReplies] = useState<Replies[]>([]);
 
   useEffect(() => {
     fetch("/api/comments")
@@ -70,7 +38,7 @@ export default function Home() {
               dateCreated={comment.createdAt}
               commentContent={comment.content}
               commentScore={comment.score}
-              replies={[]}
+              replies={comment.replies}
               replyImage={comment.user.image.png}
             />
           );

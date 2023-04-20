@@ -14,34 +14,7 @@ import ReplyCard from "./ReplyCard";
 import MyComment from "./MyComment";
 import { useState } from "react";
 import AddComment from "./AddComment";
-
-interface CommentUser {
-  id: number;
-  user: {
-    image: {
-      png: string;
-    };
-    username: string;
-  };
-}
-
-interface CommentReply {
-  id: number;
-  content: string;
-  createdAt: string;
-  score: number;
-  users: CommentUser[];
-}
-
-interface CommentsProps {
-  userImage: string;
-  userName: string;
-  dateCreated: string;
-  commentContent: string;
-  commentScore: number;
-  replies: CommentReply[];
-  replyImage: string;
-}
+import { CommentProps } from "@/interface/interfaces";
 
 const Cards = ({
   userImage,
@@ -50,7 +23,7 @@ const Cards = ({
   commentContent,
   commentScore,
   replies,
-}: CommentsProps) => {
+}: CommentProps) => {
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>("");
@@ -101,25 +74,20 @@ const Cards = ({
             }}
           />
         )}
-        {!isReplying && <MyComment />}
-        <ReplyCard
-          userImage={"/images/avatars/image-amyrobson.png"}
-          userName={"tonnipaul"}
-          dateCreated={"3 weeks ago"}
-          commentContent={
-            "I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant."
-          }
-          commentScore={2}
-        />
-        <ReplyCard
-          userImage={"/images/avatars/image-juliusomo.png"}
-          userName={"juliusomo"}
-          dateCreated={"2 days ago"}
-          commentContent={
-            "If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first."
-          }
-          commentScore={6}
-        />
+        {/* {!isReplying && <MyComment />} */}
+
+        {replies.map((reply) => {
+          return (
+            <ReplyCard
+              key={reply.id}
+              userImage={reply.user.image.png}
+              userName={reply.user.username}
+              dateCreated={reply.createdAt}
+              commentContent={reply.content}
+              commentScore={reply.score}
+            />
+          );
+        })}
       </ReplyContainerStyle>
     </>
   );
