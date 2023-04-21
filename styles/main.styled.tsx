@@ -197,3 +197,25 @@ export const ButtonContainer = styled.div`
     top: 2rem;
   }
 `;
+
+
+export const Loader = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 0.5s infinite;
+  font-size: 2rem;
+
+  @keyframes pulse {
+    0% {
+      color: var(--blue);
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      color: var(--blue);
+    }
+  }
+`;

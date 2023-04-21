@@ -8,6 +8,7 @@ import {
   UserData,
   ReplyContainerStyle,
   Container,
+  Loader,
 } from "@/styles/main.styled";
 import replyIcon from "../public/images/icon-reply.svg";
 import Image from "next/image";
@@ -24,9 +25,10 @@ const Main = () => {
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>("");
+
   const { data, error } = useSWR("/api/comments", fetcher);
   if (error) return <div>Error fetching comments</div>;
-  if (!data) return <div>Loading comments...</div>;
+  if (!data) return <Loader>Loading comments...</Loader>;
 
   const { comments, currentUser } = data;
 
