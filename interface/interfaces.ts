@@ -1,11 +1,11 @@
-interface CommentUser {
+import { FormEvent } from "react";
+
+export interface CommentUser {
   id: number;
-  user: {
-    image: {
-      png: string;
-    };
-    username: string;
+  image: {
+    png: string;
   };
+  username: string;
 }
 
 export interface Replies {
@@ -19,16 +19,7 @@ export interface Replies {
   content: string;
   createdAt: string;
   score: number;
-}
-
-export interface CommentProps {
-  userImage: string;
-  userName: string;
-  dateCreated: string;
-  commentContent: string;
-  commentScore: number;
-  replies: Replies[];
-  replyImage: string;
+  replyingTo: string;
 }
 
 export interface Comment {
@@ -45,4 +36,11 @@ export interface Comment {
   };
   replies: Replies[];
   replyingTo?: string;
+}
+
+export interface AddCommentProps {
+  image: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  replyingTo: string;
 }

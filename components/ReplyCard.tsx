@@ -17,6 +17,7 @@ interface ReplyProps {
   dateCreated: string;
   commentContent: string;
   commentScore: number;
+  onClick: () => void;
 }
 const ReplyCard = ({
   userImage,
@@ -24,6 +25,7 @@ const ReplyCard = ({
   dateCreated,
   commentContent,
   commentScore,
+  onClick,
 }: ReplyProps) => {
   return (
     <CardStyle>
@@ -45,7 +47,7 @@ const ReplyCard = ({
           <button>-</button>
         </ScoreCountContainer>
 
-        <ReplyButton>
+        <ReplyButton onClick={onClick}>
           <Image src={replyIcon} alt="reply-icon" />
           Reply
         </ReplyButton>
