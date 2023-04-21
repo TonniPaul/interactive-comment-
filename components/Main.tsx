@@ -16,23 +16,19 @@ import MyComment from "./MyComment";
 import { useState, useEffect } from "react";
 import AddComment from "./AddComment";
 import { Comment, CommentUser } from "@/interface/interfaces";
+import useSWR from "swr";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Main = () => {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [user, setUser] = useState<CommentUser[]>([]);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [newComment, setNewComment] = useState<string>("");
+  const { data, error } = useSWR("/api/comments", fetcher);
+  if (error) return <div>Error fetching comments</div>;
+  if (!data) return <div>Loading comments...</div>;
 
-  useEffect(() => {
-    fetch("/api/comments")
-      .then((response) => response.json())
-      .then((data) => {
-        setComments(data.comments);
-        setUser(data.currentUser);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  const { comments, currentUser } = data;
 
   const handleReplyClick = () => {
     setIsReplying(true);
@@ -45,7 +41,7 @@ const Main = () => {
 
   return (
     <Container>
-      {comments.map((data, index) => {
+      {comments.map((data: Comment, index: number) => {
         return (
           <div key={index}>
             <CardStyle>
