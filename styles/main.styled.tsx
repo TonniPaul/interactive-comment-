@@ -189,7 +189,7 @@ export const ButtonContainer = styled.div`
   }
 
   & :nth-child(1) {
-    color: #ed6368;
+    color: var(--red);
   }
   @media (min-width: 768px) {
     position: absolute;
@@ -218,5 +218,52 @@ export const Loader = styled.div`
     100% {
       color: var(--color);
     }
+  }
+`;
+
+export const DeleteWarningStyle = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(1px);
+  z-index: 2;
+
+  & div {
+    width: 90%;
+    margin: auto;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1rem 0.5rem;
+    max-width: 400px;
+
+    & div h4 {
+      margin: 0.5rem 0;
+      font-size: 18px;
+      text-transform: capitalize;
+    }
+  }
+
+  & > div {
+    box-shadow: 0px 2px 8px rgba(99, 99, 99, 0.4);
+  }
+
+  & > div :nth-of-type(2) {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  & div button {
+    padding: 0.5rem 1rem;
+    color: var(--white);
+    border-radius: 5px;
+    background: var(--red);
+  }
+  & > div :nth-of-type(2) button:nth-of-type(1) {
+    background: var(--darkGrey);
   }
 `;

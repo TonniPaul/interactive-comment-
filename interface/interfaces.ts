@@ -44,3 +44,7 @@ export interface AddCommentProps {
   replyingTo: string;
 }
 
+export interface DeleteWarningProps {
+  onCancel: () => void;
+  onDelete: () => void;
+}

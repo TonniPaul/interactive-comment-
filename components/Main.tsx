@@ -9,6 +9,7 @@ import {
   ReplyContainerStyle,
   Container,
   Loader,
+  ButtonContainer,
 } from "@/styles/main.styled";
 import replyIcon from "../public/images/icon-reply.svg";
 import Image from "next/image";
@@ -16,7 +17,10 @@ import ReplyCard from "./ReplyCard";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import AddComment from "./AddComment";
 import { Comment, CommentUser } from "@/interface/interfaces";
+import editIcon from "../public/images/icon-edit.svg";
+import deleteIcon from "../public/images/icon-delete.svg";
 import useSWR from "swr";
+import DeleteWarning from "./DeleteWarning";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -95,6 +99,10 @@ const Main = () => {
                     height={30}
                   />
                   <p>{data.user.username}</p>
+                  {data.user.username === currentUser.username && (
+                    <span>you</span>
+                  )}
+
                   <p>{data.createdAt}</p>
                 </UserData>
 
@@ -113,15 +121,33 @@ const Main = () => {
                   <button>-</button>
                 </ScoreCountContainer>
 
-                {!isReplying && (
+                {data.user.username !== currentUser.username ? (
                   <ReplyButton onClick={handleReplyClick}>
                     <Image src={replyIcon} alt="reply-icon" />
                     Reply
                   </ReplyButton>
+                ) : (
+                  <ButtonContainer>
+                    <button>
+                      <Image src={deleteIcon} alt="reply-icon" />
+                      Delete
+                    </button>
+                    <button>
+                      <Image src={editIcon} alt="reply-icon" />
+                      Edit
+                    </button>
+                  </ButtonContainer>
                 )}
               </SpaceBetween>
             </CardStyle>
-
+            <DeleteWarning
+              onCancel={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+              onDelete={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
             <ReplyContainerStyle>
               <hr />
               {isReplying && (

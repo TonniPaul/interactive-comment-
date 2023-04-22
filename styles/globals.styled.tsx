@@ -18,6 +18,7 @@ const GlobalStyles = createGlobalStyle`
   --black : #2a3642;
   --blue :#5357b6;
   --borderColor : #c5c6ef;
+  --red : #ed6368;
 }
 
 body  {
