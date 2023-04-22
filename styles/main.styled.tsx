@@ -189,7 +189,7 @@ export const ButtonContainer = styled.div`
   }
 
   & :nth-child(1) {
-    color: red;
+    color: #ed6368;
   }
   @media (min-width: 768px) {
     position: absolute;
@@ -197,7 +197,6 @@ export const ButtonContainer = styled.div`
     top: 2rem;
   }
 `;
-
 
 export const Loader = styled.div`
   height: 100vh;
@@ -207,15 +206,17 @@ export const Loader = styled.div`
   animation: pulse 0.5s infinite;
   font-size: 2rem;
 
+  --color: ${({ color }) => color};
+
   @keyframes pulse {
     0% {
-      color: var(--blue);
+      color: var(--color);
     }
     50% {
       opacity: 0;
     }
     100% {
-      color: var(--blue);
+      color: var(--color);
     }
   }
 `;

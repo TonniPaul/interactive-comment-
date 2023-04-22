@@ -24,6 +24,7 @@ body  {
   background: var(--grey);
   font-weight: 400;
   font-size: 1rem;
+  color: var(--black);
 }
 button {
   background: inherit;

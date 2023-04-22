@@ -30,7 +30,6 @@ export interface Comment {
   user: {
     image: {
       png: string;
-      webp: string;
     };
     username: string;
   };
@@ -44,3 +43,4 @@ export interface AddCommentProps {
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
   replyingTo: string;
 }
+

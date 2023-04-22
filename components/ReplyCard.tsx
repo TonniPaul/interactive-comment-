@@ -7,8 +7,11 @@ import {
   TextAreaStyle,
   Block,
   UserData,
+  ButtonContainer,
 } from "@/styles/main.styled";
 import replyIcon from "../public/images/icon-reply.svg";
+import editIcon from "../public/images/icon-edit.svg";
+import deleteIcon from "../public/images/icon-delete.svg";
 import Image from "next/image";
 
 interface ReplyProps {
@@ -17,6 +20,8 @@ interface ReplyProps {
   dateCreated: string;
   commentContent: string;
   commentScore: number;
+  user: boolean;
+  handleAdd: () => void;
   onClick: () => void;
 }
 const ReplyCard = ({
@@ -26,6 +31,7 @@ const ReplyCard = ({
   commentContent,
   commentScore,
   onClick,
+  user,
 }: ReplyProps) => {
   return (
     <CardStyle>
@@ -35,6 +41,8 @@ const ReplyCard = ({
             <Image src={userImage} alt={userName} width={30} height={30} />
           </ImageStyle>
           <p>{userName}</p>
+          {user && <span>you</span>}
+
           <p>{dateCreated}</p>
         </UserData>
 
@@ -47,10 +55,23 @@ const ReplyCard = ({
           <button>-</button>
         </ScoreCountContainer>
 
-        <ReplyButton onClick={onClick}>
-          <Image src={replyIcon} alt="reply-icon" />
-          Reply
-        </ReplyButton>
+        {!user ? (
+          <ReplyButton onClick={onClick}>
+            <Image src={replyIcon} alt="reply-icon" />
+            Reply
+          </ReplyButton>
+        ) : (
+          <ButtonContainer>
+            <button>
+              <Image src={deleteIcon} alt="reply-icon" />
+              Delete
+            </button>
+            <button>
+              <Image src={editIcon} alt="reply-icon" />
+              Edit
+            </button>
+          </ButtonContainer>
+        )}
       </SpaceBetween>
     </CardStyle>
   );

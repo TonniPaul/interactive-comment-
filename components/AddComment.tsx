@@ -9,16 +9,15 @@ const AddComment = ({
   onSubmit,
   onChange,
 }: AddCommentProps) => {
-  const [replyTo, setReplyTo] = useState<string>("");
+  const [replyValue, setReplyValue] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReplyTo(e.target.value);
-    onChange(e);
+    setReplyValue(e.target.value);
   };
 
   return (
     <AddCommentStyle onSubmit={onSubmit}>
-      <textarea value={replyTo} onChange={handleChange} />
+      <textarea value={replyingTo} onChange={onChange} />
       <Image src={image} alt="profile-img" width={30} height={30} />
       <SendButton>Send</SendButton>
     </AddCommentStyle>
