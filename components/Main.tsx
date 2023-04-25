@@ -1,51 +1,27 @@
-import {
-  CardStyle,
-  ScoreCountContainer,
-  SpaceBetween,
-  ReplyButton,
-  TextAreaStyle,
-  Block,
-  UserData,
-  ReplyContainerStyle,
-  Container,
-  Loader,
-  ButtonContainer,
-} from "@/styles/main.styled";
-import replyIcon from "../public/images/icon-reply.svg";
-import Image from "next/image";
+import { ReplyContainerStyle, Container, Loader } from "@/styles/main.styled";
 import ReplyCard from "./ReplyCard";
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import AddComment from "./AddComment";
 import { Comment, CommentUser } from "@/interface/interfaces";
-import editIcon from "../public/images/icon-edit.svg";
-import deleteIcon from "../public/images/icon-delete.svg";
 import useSWR from "swr";
 import DeleteWarning from "./DeleteWarning";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Main = () => {
+  const [comment, setComments] = useState<Comment[]>([]);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [replyValue, setReplyValue] = useState<string>("");
-  const [newComment, setNewComment] = useState<Comment>({
-    id: 0,
-    content: "",
-    createdAt: "",
-    score: 0,
-    user: { image: { png: "" }, username: "" },
-    replies: [],
-    replyingTo: "",
-  });
-
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
   const { data, error, mutate } = useSWR("/api/comments", fetcher);
-  if (error) return <Loader color="red">Error fetching comments</Loader>;
-  if (!data) return <Loader color="#5357b6">Loading comments...</Loader>;
+  if (error) return <Loader color="var(--red)">Error fetching comments</Loader>;
+  if (!data) return <Loader color="var(--blue)">Loading comments...</Loader>;
 
   const { comments, currentUser } = data;
 
-  const handleReplyClick = () => {
-    setIsReplying(true);
+  const handleReplyClick = (commentId: number) => {
+    setReplyingTo(commentId);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -56,6 +32,8 @@ const Main = () => {
     e.preventDefault();
     setIsSubmitted(true);
     setIsReplying(false);
+
+    if (!replyValue.trim()) return;
 
     const nComment = {
       id: comments.length + 1,
@@ -79,7 +57,6 @@ const Main = () => {
     if (res.ok) {
       const updatedComments = [...comments, nComment];
       localStorage.setItem("myData", JSON.stringify(updatedComments));
-      // setNewComment(updatedComments);
       mutate({ comments: updatedComments, currentUser }, false);
     }
   };
@@ -89,89 +66,24 @@ const Main = () => {
       {comments.map((data: Comment, index: number) => {
         return (
           <div key={index}>
-            <CardStyle>
-              <Block>
-                <UserData>
-                  <Image
-                    src={data.user.image.png}
-                    alt={data.user.username}
-                    width={30}
-                    height={30}
-                  />
-                  <p>{data.user.username}</p>
-                  {data.user.username === currentUser.username && (
-                    <span>you</span>
-                  )}
-
-                  <p>{data.createdAt}</p>
-                </UserData>
-
-                <TextAreaStyle value={data.content} disabled />
-              </Block>
-              <SpaceBetween>
-                <ScoreCountContainer>
-                  <button
-                    onClick={() => {
-                      data.score + 1;
-                    }}
-                  >
-                    +
-                  </button>
-                  <button> {data.score + 1} </button>
-                  <button>-</button>
-                </ScoreCountContainer>
-
-                {data.user.username !== currentUser.username ? (
-                  <ReplyButton onClick={handleReplyClick}>
-                    <Image src={replyIcon} alt="reply-icon" />
-                    Reply
-                  </ReplyButton>
-                ) : (
-                  <ButtonContainer>
-                    <button>
-                      <Image src={deleteIcon} alt="reply-icon" />
-                      Delete
-                    </button>
-                    <button>
-                      <Image src={editIcon} alt="reply-icon" />
-                      Edit
-                    </button>
-                  </ButtonContainer>
-                )}
-              </SpaceBetween>
-            </CardStyle>
-            <DeleteWarning
-              onCancel={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              onDelete={function (): void {
-                throw new Error("Function not implemented.");
-              }}
+            <ReplyCard
+              userImage={data.user.image.png}
+              userName={data.user.username}
+              dateCreated={data.createdAt}
+              commentContent={data.content}
+              commentScore={data.score}
+              user={currentUser.username}
+              onReplyClick={handleReplyClick}
+              commentId={data.id}
             />
             <ReplyContainerStyle>
               <hr />
-              {isReplying && (
+              {replyingTo === data.id && (
                 <AddComment
                   image={"/images/avatars/image-amyrobson.png"}
                   onChange={handleInputChange}
                   onSubmit={handleCommentSubmit}
-                  replyingTo={""}
-                />
-              )}
-              {data.replies.length > 0 && (
-                <ReplyCard
-                  userImage={""}
-                  userName={""}
-                  dateCreated={""}
-                  commentContent={""}
-                  commentScore={0}
-                  user={false}
-                  onClick={function (): void {
-                    throw new Error("Function not implemented.");
-                  }}
-                  handleAdd={function (): void {
-                    throw new Error("Function not implemented.");
-                  }}
+                  replyingTo={data.user.username}
                 />
               )}
               {data.replies.map((reply) => {
@@ -184,43 +96,10 @@ const Main = () => {
                       dateCreated={reply.createdAt}
                       commentContent={reply.content}
                       commentScore={reply.score}
-                      onClick={handleReplyClick}
-                      user={reply.user.username === currentUser.username}
-                      handleAdd={function (): void {
-                        throw new Error("Function not implemented.");
-                      }}
+                      onReplyClick={handleReplyClick}
+                      user={currentUser.username}
+                      commentId={data.id}
                     />
-                    {isReplying && (
-                      <ReplyContainerStyle>
-                        <hr />
-                        {isReplying && (
-                          <AddComment
-                            image={"/images/avatars/image-amyrobson.png"}
-                            onChange={function (): void {
-                              throw new Error("Function not implemented.");
-                            }}
-                            onSubmit={handleCommentSubmit}
-                            replyingTo={"hello there"}
-                          />
-                        )}
-                        {isSubmitted && !isReplying && (
-                          <ReplyCard
-                            userImage={""}
-                            userName={""}
-                            dateCreated={""}
-                            commentContent={""}
-                            commentScore={0}
-                            user={false}
-                            onClick={function (): void {
-                              throw new Error("Function not implemented.");
-                            }}
-                            handleAdd={function (): void {
-                              throw new Error("Function not implemented.");
-                            }}
-                          />
-                        )}
-                      </ReplyContainerStyle>
-                    )}
                   </div>
                 );
               })}

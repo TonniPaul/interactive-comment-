@@ -1,5 +1,15 @@
-import styled from "styled-components";
+import { DetailedHTMLProps, TextareaHTMLAttributes } from "react";
+import styled, { ThemeProps } from "styled-components";
 
+interface TextAreaProps
+  extends DetailedHTMLProps<
+    TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  > {
+  border?: string;
+  padding?: string;
+  height?: string;
+}
 export const Container = styled.div`
   width: 100%;
   padding: 3rem 2rem;
@@ -43,8 +53,30 @@ export const UserData = styled.div`
 `;
 
 export const Block = styled.div`
+  display: block;
+  & > span {
+    position: relative;
+    padding: 0.5rem 0 1.5rem;
+    display: block;
+  }
+  & button {
+    position: absolute;
+    right: 0;
+  }
   @media (min-width: 768px) {
     width: 100%;
+  }
+`;
+
+export const PrimaryButton = styled.button`
+  background: var(--blue);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  align-self: flex-end;
+
+  &:hover {
+    background: #a9abda;
   }
 `;
 
@@ -75,14 +107,15 @@ export const ScoreCountContainer = styled.div`
   }
 `;
 
-export const TextAreaStyle = styled.textarea`
+export const TextAreaStyle = styled.textarea<TextAreaProps>`
   min-width: 100%;
-  min-height: 110px;
+  min-height: ${({ height }) => height} !important;
   max-height: max-content;
   background: none;
   outline: none;
-  border: none;
+  border: ${({ border }) => border};
   font-size: inherit;
+  padding: ${({ padding }) => padding};
 
   @media (min-width: 768px) {
     min-height: 80px;
@@ -162,6 +195,10 @@ export const AddCommentStyle = styled.form`
       order: 2;
       width: max-content;
       height: max-content;
+    }
+
+    & button:hover {
+      background: #a9abda;
     }
   }
 `;
@@ -252,7 +289,7 @@ export const DeleteWarningStyle = styled.div`
     box-shadow: 0px 2px 8px rgba(99, 99, 99, 0.4);
   }
 
-  & > div :nth-of-type(2) {
+  & > div :last-child {
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -262,8 +299,18 @@ export const DeleteWarningStyle = styled.div`
     color: var(--white);
     border-radius: 5px;
     background: var(--red);
+    transition: 0.5s ease-in-out;
   }
-  & > div :nth-of-type(2) button:nth-of-type(1) {
+
+  & div button:hover {
+    background: #f6b1b3;
+  }
+
+  & > div :last-child :first-child {
     background: var(--darkGrey);
+  }
+
+  & > div :last-child :first-child:hover {
+    background: #b3b8be;
   }
 `;

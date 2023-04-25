@@ -37,7 +37,7 @@ button {
 
 textarea {
   resize: none;
-  min-height: 110px;
+  min-height: 120px;
   width: 100%;
   background: inherit;
   border-radius: 5px;
