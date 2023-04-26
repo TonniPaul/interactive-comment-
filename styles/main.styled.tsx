@@ -267,9 +267,12 @@ export const DeleteWarningStyle = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(1px);
+  backdrop-filter: blur(5px);
   z-index: 2;
 
+  body {
+    width: 50px !important;
+  }
   & div {
     width: 90%;
     margin: auto;

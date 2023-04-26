@@ -1,10 +1,7 @@
 import { DeleteWarningProps } from "@/interface/interfaces";
 import { DeleteWarningStyle } from "@/styles/main.styled";
 
-export default function DeleteWarning({
-  onCancel,
-  onDelete,
-}: DeleteWarningProps) {
+export default function DeleteWarning({ onCancel, onConfirm }: DeleteWarningProps) {
   return (
     <DeleteWarningStyle>
       <div>
@@ -17,18 +14,8 @@ export default function DeleteWarning({
           </p>
         </div>
         <div>
-          <button
-            onClick={onCancel}
-            className="bg-Grayish-Blue px-8 py-3 rounded-lg hover:opacity-50"
-          >
-            NO, CANCEL
-          </button>
-          <button
-            onClick={onDelete}
-            className="bg-Soft-Red px-8 py-3 rounded-lg hover:opacity-50"
-          >
-            YES, DELETE
-          </button>
+          <button onClick={onCancel}>NO, CANCEL</button>
+          <button onClick={onConfirm}>YES, DELETE</button>
         </div>
       </div>
     </DeleteWarningStyle>

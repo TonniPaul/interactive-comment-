@@ -16,6 +16,7 @@ import deleteIcon from "../public/images/icon-delete.svg";
 import Image from "next/image";
 import { useState } from "react";
 import DeleteWarning from "./DeleteWarning";
+import { Comment } from "@/interface/interfaces";
 
 interface ReplyProps {
   userImage: string;
@@ -26,6 +27,7 @@ interface ReplyProps {
   user: string;
   onReplyClick: (commentId: number) => void;
   commentId: number;
+  deleteComment: () => void;
 }
 const ReplyCard = ({
   userImage,
@@ -36,6 +38,7 @@ const ReplyCard = ({
   onReplyClick,
   user,
   commentId,
+  deleteComment,
 }: ReplyProps) => {
   const [voteCount, setVoteCount] = useState<number>(commentScore);
   const [hasVoted, setHasVoted] = useState<boolean>(false);
@@ -79,19 +82,11 @@ const ReplyCard = ({
 
   const handleEditUpdate = async () => {
     setIsEditing(false);
-    // try {
-    //   const res = await fetch(`/api/comments/${commentId}`, {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ content: editedComment }),
-    //   });
-    //   const { data } = await res.json();
-    //   setEditedComment(data.content);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+  };
+
+  const handleCommentDelete = () => {
+    deleteComment();
+    setIsDeleting(false);
   };
 
   return (
@@ -152,8 +147,8 @@ const ReplyCard = ({
       </SpaceBetween>
       {isDeleting && (
         <DeleteWarning
-          onDelete={handleCancelClick}
           onCancel={handleCancelClick}
+          onConfirm={handleCommentDelete}
         />
       )}
     </CardStyle>

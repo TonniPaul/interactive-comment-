@@ -4,6 +4,7 @@ export interface CommentUser {
   id: number;
   image: {
     png: string;
+    webp: string;
   };
   username: string;
 }
@@ -46,5 +47,5 @@ export interface AddCommentProps {
 
 export interface DeleteWarningProps {
   onCancel: () => void;
-  onDelete: () => void;
+  onConfirm: () => void;
 }

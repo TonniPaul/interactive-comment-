@@ -37,10 +37,16 @@ button {
 
 textarea {
   resize: none;
-  min-height: 120px;
+  min-height: 130px;
   width: 100%;
   background: inherit;
   border-radius: 5px;
+}
+@media (max-width : 300px ) {
+  body {
+    font-size: .813rem ;
+  }
+
 }
 
 `;
