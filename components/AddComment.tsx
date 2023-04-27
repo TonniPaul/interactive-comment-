@@ -5,19 +5,13 @@ import { useState } from "react";
 
 const AddComment = ({
   image,
-  replyingTo,
+  replyValue,
   onSubmit,
   onChange,
 }: AddCommentProps) => {
-  const [replyValue, setReplyValue] = useState<string>("");
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReplyValue(e.target.value);
-  };
-
   return (
     <AddCommentStyle onSubmit={onSubmit}>
-      <textarea value={replyingTo} onChange={onChange} />
+      <textarea value={replyValue} onChange={onChange} />
       <Image src={image} alt="profile-img" width={30} height={30} />
       <SendButton>Send</SendButton>
     </AddCommentStyle>

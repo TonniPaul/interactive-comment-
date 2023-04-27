@@ -42,7 +42,7 @@ export interface AddCommentProps {
   image: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  replyingTo: string;
+  replyValue: string;
 }
 
 export interface DeleteWarningProps {

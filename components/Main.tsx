@@ -56,7 +56,11 @@ const Main = () => {
     setComment(updatedComment);
     setReplyValue("");
   };
-  const handleCommentReplyAdd = (commentId: number) => {
+
+  const handleCommentReplySubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!replyValue.trim()) return;
+
     const updatedComments = comment.map((comment) => {
       const nReply = {
         id: Math.random(),
@@ -70,12 +74,14 @@ const Main = () => {
         replies: [],
         replyingTo: comment.user.username,
       };
-      if (comment.id === commentId) {
+
+      if (comment.id === replyId) {
         const updatedReplies = [...comment.replies, nReply];
         return { ...comment, replies: updatedReplies };
       }
       return comment;
     });
+    setReplyValue("");
     setComment(updatedComments);
     setReplyId(null);
   };
@@ -120,8 +126,8 @@ const Main = () => {
                 <AddComment
                   image={currentUser.image.png}
                   onChange={handleInputChange}
-                  onSubmit={handleCommentSubmit}
-                  replyingTo={replyValue}
+                  onSubmit={handleCommentReplySubmit}
+                  replyValue={replyValue}
                 />
               )}
               {data.replies.map((reply) => {
@@ -151,7 +157,7 @@ const Main = () => {
         image={currentUser.image.png}
         onChange={handleInputChange}
         onSubmit={handleCommentSubmit}
-        replyingTo={replyValue}
+        replyValue={replyValue}
       />
     </Container>
   );
