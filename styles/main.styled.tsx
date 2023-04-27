@@ -45,17 +45,20 @@ export const Block = styled.div`
   display: block;
   font-weight: 400 !important;
   & > span {
-    position: relative;
+    /* width: 100%; */
+    display: flex;
+    gap: 10px;
+    position: absolute;
+    right: 2rem;
     padding: 0.5rem 0 1.5rem;
-    display: block;
   }
 
-  & button {
-    position: absolute;
-    right: 0;
-  }
   @media (min-width: 768px) {
     width: 100%;
+
+    & > span {
+      top: 1rem;
+    }
   }
 `;
 export const ContentTextStyle = styled.p`
@@ -108,6 +111,7 @@ export const TextAreaStyle = styled.textarea`
   min-width: 100%;
   background: none;
   outline: none;
+  min-height: 150px;
   border: 2px solid var(--borderColor);
   font-size: inherit;
   font-weight: 400;

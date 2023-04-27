@@ -1,7 +1,6 @@
 import { AddCommentProps } from "@/interface/interfaces";
 import { AddCommentStyle, SendButton } from "@/styles/main.styled";
 import Image from "next/image";
-import { useState } from "react";
 
 const AddComment = ({
   image,
