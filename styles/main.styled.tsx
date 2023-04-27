@@ -1,19 +1,9 @@
-import { DetailedHTMLProps, TextareaHTMLAttributes } from "react";
-import styled, { ThemeProps } from "styled-components";
+import styled from "styled-components";
 
-interface TextAreaProps
-  extends DetailedHTMLProps<
-    TextareaHTMLAttributes<HTMLTextAreaElement>,
-    HTMLTextAreaElement
-  > {
-  border?: string;
-  padding?: string;
-  height?: string;
-}
 export const Container = styled.div`
   width: 100%;
   padding: 3rem 2rem;
-  max-width: 700px;
+  max-width: 800px;
   overflow: hidden;
   margin: auto;
 `;
@@ -23,13 +13,7 @@ export const CardStyle = styled.div`
   padding: 2rem;
   border-radius: 10px;
   margin: 1rem auto;
-  max-width: 700px;
   position: relative;
-
-  div p:nth-of-type(1) {
-    font-weight: 600;
-    text-transform: lowercase;
-  }
 
   @media (min-width: 768px) {
     display: flex;
@@ -44,6 +28,11 @@ export const UserData = styled.div`
   gap: 10px;
   margin-bottom: 1rem;
 
+  & p:nth-of-type(1) {
+    font-weight: 600;
+    text-transform: lowercase;
+  }
+
   & span {
     background: var(--blue);
     color: var(--white);
@@ -54,17 +43,25 @@ export const UserData = styled.div`
 
 export const Block = styled.div`
   display: block;
+  font-weight: 400 !important;
   & > span {
     position: relative;
     padding: 0.5rem 0 1.5rem;
     display: block;
   }
+
   & button {
     position: absolute;
     right: 0;
   }
   @media (min-width: 768px) {
     width: 100%;
+  }
+`;
+export const ContentTextStyle = styled.p`
+  & span {
+    color: var(--blue);
+    font-weight: 600;
   }
 `;
 
@@ -107,15 +104,14 @@ export const ScoreCountContainer = styled.div`
   }
 `;
 
-export const TextAreaStyle = styled.textarea<TextAreaProps>`
+export const TextAreaStyle = styled.textarea`
   min-width: 100%;
-  min-height: ${({ height }) => height} !important;
-  max-height: max-content;
   background: none;
   outline: none;
-  border: ${({ border }) => border};
+  border: 2px solid var(--borderColor);
   font-size: inherit;
-  padding: ${({ padding }) => padding};
+  font-weight: 400;
+  padding: 0.5rem 1rem;
 
   @media (min-width: 768px) {
     min-height: 80px;

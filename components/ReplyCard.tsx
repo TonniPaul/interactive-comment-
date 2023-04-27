@@ -9,6 +9,7 @@ import {
   UserData,
   ButtonContainer,
   PrimaryButton,
+  ContentTextStyle,
 } from "@/styles/main.styled";
 import replyIcon from "../public/images/icon-reply.svg";
 import editIcon from "../public/images/icon-edit.svg";
@@ -25,6 +26,7 @@ interface ReplyProps {
   commentContent: string;
   commentScore: number;
   user: string;
+  responseTo: string;
   onReplyClick: (commentId: number) => void;
   commentId: number;
   deleteComment: () => void;
@@ -37,6 +39,7 @@ const ReplyCard = ({
   commentScore,
   onReplyClick,
   user,
+  responseTo,
   commentId,
   deleteComment,
 }: ReplyProps) => {
@@ -65,9 +68,11 @@ const ReplyCard = ({
       setVoteCount(voteCount);
     }
   };
+
   const handleCancelClick = () => {
     setIsDeleting(false);
   };
+
   const handleDeleteClick = () => {
     setIsDeleting(true);
   };
@@ -80,7 +85,7 @@ const ReplyCard = ({
     setEditedComment(e.target.value);
   };
 
-  const handleEditUpdate = async () => {
+  const handleEditUpdate = () => {
     setIsEditing(false);
   };
 
@@ -101,15 +106,19 @@ const ReplyCard = ({
 
           <p>{dateCreated}</p>
         </UserData>
+        {!isEditing ? (
+          <ContentTextStyle>
+            {responseTo && <span>@{responseTo} </span>}
+            {editedComment}
+          </ContentTextStyle>
+        ) : (
+          <TextAreaStyle
+            value={editedComment}
+            disabled={isEditing ? false : true}
+            onChange={handleCommentChange}
+          />
+        )}
 
-        <TextAreaStyle
-          value={editedComment}
-          disabled={isEditing ? false : true}
-          border={!isEditing ? "none" : "2px solid var(--borderColor)"}
-          padding={!isEditing ? "none" : ".5rem 1rem"}
-          height={!isEditing ? "120px" : "150px"}
-          onChange={handleCommentChange}
-        />
         {isEditing && (
           <span>
             <PrimaryButton onClick={handleEditUpdate}>Update</PrimaryButton>

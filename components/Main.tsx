@@ -11,7 +11,7 @@ const Main = () => {
   const [comment, setComment] = useState<Comment[]>([]);
   const currentUser = myData.currentUser;
   const [replyValue, setReplyValue] = useState<string>("");
-  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyId, setReplyId] = useState<number | null>(null);
 
   useEffect(() => {
     const localComments = JSON.parse(
@@ -26,14 +26,8 @@ const Main = () => {
     localStorage.setItem("myComments", JSON.stringify(comment));
   }, [comment]);
 
-  // const { data, error, mutate } = useSWR("/api/comments", fetcher);
-  // if (error) return <Loader color="var(--red)">Error fetching comments</Loader>;
-  // if (!data) return <Loader color="var(--blue)">Loading comments...</Loader>;
-
-  // const { comments, currentUsers } = data;
-
   const handleReplyClick = (commentId: number) => {
-    setReplyingTo(commentId);
+    setReplyId(commentId);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,37 +56,32 @@ const Main = () => {
     setComment(updatedComment);
     setReplyValue("");
   };
-  const handleCommentReplyAdd = (commentId: number, replyId: number) => {
+  const handleCommentReplyAdd = (commentId: number) => {
     const updatedComments = comment.map((comment) => {
+      const nReply = {
+        id: Math.random(),
+        content: replyValue,
+        createdAt: "just now",
+        score: 0,
+        user: {
+          image: { png: currentUser.image.png },
+          username: currentUser.username,
+        },
+        replies: [],
+        replyingTo: comment.user.username,
+      };
       if (comment.id === commentId) {
-        const updatedReplies = [
-          ...comment.replies,
-          {
-            id: Date.now(),
-            content: replyValue,
-            createdAt: "just now",
-            score: 0,
-            user: {
-              image: { png: currentUser.image.png },
-              username: currentUser.username,
-            },
-            replies: [],
-            replyingTo: comment.user.username,
-          },
-        ];
+        const updatedReplies = [...comment.replies, nReply];
         return { ...comment, replies: updatedReplies };
       }
       return comment;
     });
     setComment(updatedComments);
-    setReplyingTo(null);
+    setReplyId(null);
   };
 
   const handleCommentDelete = (commentId: number) => {
-    console.log("commentId", commentId);
-    console.log("comment", comment);
     const filteredComments = comment.filter((c) => c.id !== commentId);
-    console.log("filteredComments", filteredComments);
     setComment(filteredComments);
   };
 
@@ -105,11 +94,8 @@ const Main = () => {
       }
       return comment;
     });
-    console.log("Date Now", Date.now);
-    console.log("removedComments", removedComments);
     setComment(removedComments);
   };
-  console.log("comment-out", comment);
 
   return (
     <Container>
@@ -126,15 +112,16 @@ const Main = () => {
               onReplyClick={handleReplyClick}
               commentId={data.id}
               deleteComment={() => handleCommentDelete(data.id)}
+              responseTo={""}
             />
             <ReplyContainerStyle>
               <hr />
-              {replyingTo === data.id && (
+              {replyId === data.id && (
                 <AddComment
-                  image={"/images/avatars/image-amyrobson.png"}
+                  image={currentUser.image.png}
                   onChange={handleInputChange}
                   onSubmit={handleCommentSubmit}
-                  replyingTo={data.user.username}
+                  replyingTo={replyValue}
                 />
               )}
               {data.replies.map((reply) => {
@@ -152,6 +139,7 @@ const Main = () => {
                     deleteComment={() =>
                       handleCommentReplyDelete(data.id, reply.id)
                     }
+                    responseTo={reply.replyingTo}
                   />
                 );
               })}
