@@ -4,21 +4,15 @@ import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import AddComment from "./AddComment";
 import { Comment, CommentUser } from "@/interface/interfaces";
 import myData from "../public/data.json";
-
-// const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import crypto from "crypto";
 
 const Main = () => {
   const [comment, setComment] = useState<Comment[]>([]);
   const currentUser = myData.currentUser;
-  const [commentValue, setCommentValue] = useState<string>("");
-  const [replyValue, setReplyValue] = useState<string>("");
-  const [replyId, setReplyId] = useState<number | null>(null);
 
   useEffect(() => {
-    const localComments = JSON.parse(
-      localStorage.getItem("myComments") || "[]"
-    );
-    if (localComments) {
+    const localData = JSON.parse(localStorage.getItem("myComments") || "[]");
+    if (localData.length <= 0) {
       setComment(myData.comments);
     }
   }, []);
@@ -27,80 +21,15 @@ const Main = () => {
     localStorage.setItem("myComments", JSON.stringify(comment));
   }, [comment]);
 
-  const handleReplyClick = (commentId: number) => {
-    setReplyId(commentId);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setReplyValue(e.target.value);
-  };
-
-  const handleCommentInputChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setCommentValue(e.target.value);
-  };
-
-  const handleCommentSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!commentValue.trim()) return;
-
-    const nComment = {
-      id: Date.now(),
-      content: commentValue,
-      createdAt: "just now",
-      score: 0,
-      user: {
-        image: { png: currentUser.image.png },
-        username: currentUser.username,
-      },
-      replies: [],
-      replyingTo: "",
-    };
-
-    const updatedComment = [...comment, nComment];
-    setComment(updatedComment);
-    setCommentValue("");
-  };
-
-  const handleCommentReplySubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!replyValue.trim()) return;
-
-    const updatedComments = comment.map((comment) => {
-      const nReply = {
-        id: Math.random(),
-        content: replyValue,
-        createdAt: "just now",
-        score: 0,
-        user: {
-          image: { png: currentUser.image.png },
-          username: currentUser.username,
-        },
-        replies: [],
-        replyingTo: comment.user.username,
-      };
-
-      if (comment.id === replyId) {
-        const updatedReplies = [...comment.replies, nReply];
-        return { ...comment, replies: updatedReplies };
-      }
-      return comment;
-    });
-    setReplyValue("");
-    setComment(updatedComments);
-    setReplyId(null);
-  };
-
   const handleCommentDelete = (commentId: number) => {
-    const filteredComments = comment.filter((c) => c.id !== commentId);
+    const filteredComments = comment.filter(
+      (comments) => comments.id !== commentId
+    );
     setComment(filteredComments);
   };
 
   const handleCommentReplyDelete = (commentId: number, replyId: number) => {
-    const removedComments = comment.map((comment) => {
+    const filteredReplies = comment.map((comment) => {
       if (comment.id === commentId) {
         comment.replies = comment.replies.filter(
           (comment) => comment.id !== replyId
@@ -108,7 +37,7 @@ const Main = () => {
       }
       return comment;
     });
-    setComment(removedComments);
+    setComment(filteredReplies);
   };
 
   return (
@@ -123,68 +52,51 @@ const Main = () => {
               commentContent={data.content}
               commentScore={data.score}
               user={currentUser.username}
-              onReplyClick={handleReplyClick}
-              commentId={data.id}
               deleteComment={() => handleCommentDelete(data.id)}
               responseTo={""}
-              replyValue={replyValue}
+              setComment={setComment}
               addCommentImage={currentUser.image.png}
-              commentSubmit={handleCommentReplySubmit}
-              onChange={handleInputChange}
-              replyId={replyId === data.id}
+              placeholder={"Add Reply...."}
+              id={0}
+              comments={comment}
             />
             <ReplyContainerStyle>
-              <hr />
-              {/* {replyId === data.id && (
-                <AddComment
-                  image={currentUser.image.png}
-                  onChange={handleInputChange}
-                  onSubmit={handleCommentReplySubmit}
-                  replyValue={replyValue}
-                />
-              )} */}
               {data.replies.map((reply) => {
                 return (
-                  <div key={reply.id}>
-                    <ReplyCard
-                      userImage={reply.user.image.png}
-                      userName={reply.user.username}
-                      dateCreated={reply.createdAt}
-                      commentContent={reply.content}
-                      commentScore={reply.score}
-                      onReplyClick={handleReplyClick}
-                      user={currentUser.username}
-                      commentId={data.id}
-                      deleteComment={() =>
-                        handleCommentReplyDelete(data.id, reply.id)
-                      }
-                      responseTo={reply.replyingTo}
-                      replyValue={replyValue}
-                      addCommentImage={currentUser.image.png}
-                      commentSubmit={handleCommentReplySubmit}
-                      onChange={handleCommentInputChange}
-                      replyId={replyId === reply.id}
-                    />
-                    {/* {replyId === reply.id && (
-                      <AddComment
-                        image={currentUser.image.png}
-                        onChange={handleCommentInputChange}
-                        onSubmit={handleCommentReplySubmit}
-                        replyValue={replyValue}
-                      />
-                    )} */}
-                  </div>
+                  <ReplyCard
+                    key={reply.id}
+                    userImage={reply.user.image.png}
+                    userName={reply.user.username}
+                    dateCreated={reply.createdAt}
+                    commentContent={reply.content}
+                    commentScore={reply.score}
+                    user={currentUser.username}
+                    deleteComment={() =>
+                      handleCommentReplyDelete(data.id, reply.id)
+                    }
+                    responseTo={reply.replyingTo}
+                    addCommentImage={currentUser.image.png}
+                    placeholder={"Add Reply...."}
+                    comments={comment}
+                    setComment={setComment}
+                    id={data.id}
+                  />
                 );
               })}
             </ReplyContainerStyle>
           </div>
         );
       })}
+
       <AddComment
         image={currentUser.image.png}
-        onChange={handleCommentInputChange}
-        onSubmit={handleCommentSubmit}
-        replyValue={commentValue}
+        placeholder={"Add Comment...."}
+        username={currentUser.username}
+        comments={comment}
+        setComment={setComment}
+        commentId={0}
+        responseTo={""}
+        type={"comment"}
       />
     </Container>
   );

@@ -61,10 +61,14 @@ export const Block = styled.div`
     }
   }
 `;
+
 export const ContentTextStyle = styled.p`
   & span {
     color: var(--blue);
     font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
   }
 `;
 
@@ -78,12 +82,6 @@ export const PrimaryButton = styled.button`
   &:hover {
     background: #a9abda;
   }
-`;
-
-export const ImageStyle = styled.image`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
 `;
 
 export const ScoreCountContainer = styled.div`
@@ -149,17 +147,17 @@ export const ReplyButton = styled.button`
 `;
 
 export const ReplyContainerStyle = styled.div`
-  max-width: 90%;
+  /* max-width: 95%; */
   position: relative;
-  margin-left: 10%;
+  margin-left: 7%;
 
-  hr {
-    height: 100%;
-    border: 1px solid var(--borderColor);
+  &::before {
+    content: "";
     position: absolute;
-    top: 0;
-    left: -7%;
-    z-index: 1;
+    width: 3px;
+    height: 100%;
+    background: var(--borderColor);
+    left: -3%;
   }
 `;
 

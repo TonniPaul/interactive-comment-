@@ -27,6 +27,7 @@ body  {
   font-size: 1rem;
   color: var(--black);
 }
+
 button {
   background: inherit;
   border: none;
@@ -42,6 +43,12 @@ textarea {
   background: inherit;
   border-radius: 5px;
 }
+
+::placeholder {
+    font-style: italic;
+    color: var()--grey;
+}
+
 @media (max-width : 300px ) {
   body {
     font-size: .813rem ;

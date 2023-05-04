@@ -10,6 +10,7 @@
 
 #frontendmentor files
 /front
+/components/RoughWorks.tsx
 
 # next.js
 /.next/

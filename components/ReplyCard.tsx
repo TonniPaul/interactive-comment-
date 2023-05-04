@@ -9,58 +9,44 @@ import {
   ButtonContainer,
   PrimaryButton,
   ContentTextStyle,
-  ReplyContainerStyle,
 } from "@/styles/main.styled";
-import { FormEvent } from "react";
+import { FormEvent, useRef } from "react";
 import replyIcon from "../public/images/icon-reply.svg";
 import editIcon from "../public/images/icon-edit.svg";
 import deleteIcon from "../public/images/icon-delete.svg";
 import Image from "next/image";
 import { useState } from "react";
 import DeleteWarning from "./DeleteWarning";
-import { Comment } from "@/interface/interfaces";
+import { Comment, ReplyProps } from "@/interface/interfaces";
 import AddComment from "./AddComment";
 
-interface ReplyProps {
-  userImage: string;
-  userName: string;
-  dateCreated: string;
-  commentContent: string;
-  commentScore: number;
-  user: string;
-  responseTo: string;
-  onReplyClick: (commentId: number) => void;
-  commentId: number;
-  deleteComment: () => void;
-  replyValue: string;
-  addCommentImage: string;
-  commentSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  replyId: boolean;
-}
 const ReplyCard = ({
   userImage,
   userName,
   dateCreated,
   commentContent,
   commentScore,
-  onReplyClick,
   user,
   responseTo,
-  commentId,
   deleteComment,
-  replyValue,
   addCommentImage,
-  commentSubmit,
-  onChange,
-  replyId,
+  placeholder,
+  setComment,
+  id,
+  comments,
 }: ReplyProps) => {
   const [voteCount, setVoteCount] = useState<number>(commentScore);
   const [hasVoted, setHasVoted] = useState<boolean>(false);
   const [editedComment, setEditedComment] = useState<string>(commentContent);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleReplyClick = () => {
+    setIsVisible(!isVisible);
+  };
   const handleVoteAdd = () => {
     if (!hasVoted) {
       setVoteCount(voteCount + 1);
@@ -91,6 +77,7 @@ const ReplyCard = ({
 
   const handleEditClick = () => {
     setIsEditing(true);
+    return;
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -148,7 +135,7 @@ const ReplyCard = ({
           </ScoreCountContainer>
 
           {userName !== user ? (
-            <ReplyButton onClick={() => onReplyClick(commentId)}>
+            <ReplyButton onClick={handleReplyClick}>
               <Image src={replyIcon} alt="reply-icon" />
               Reply
             </ReplyButton>
@@ -177,17 +164,19 @@ const ReplyCard = ({
           />
         )}
       </CardStyle>
-      <ReplyContainerStyle>
-        <hr />
-        {replyId && (
-          <AddComment
-            onChange={onChange}
-            onSubmit={commentSubmit}
-            image={addCommentImage}
-            replyValue={replyValue}
-          />
-        )}
-      </ReplyContainerStyle>
+
+      {isVisible && (
+        <AddComment
+          image={addCommentImage}
+          placeholder={placeholder}
+          username={user}
+          comments={comments}
+          setComment={setComment}
+          commentId={id}
+          responseTo={responseTo}
+          type="reply"
+        />
+      )}
     </div>
   );
 };

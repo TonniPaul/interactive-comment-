@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { SetStateAction } from "react";
 
 export interface CommentUser {
   id: number;
@@ -40,12 +40,32 @@ export interface Comment {
 
 export interface AddCommentProps {
   image: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (e: FormEvent<HTMLFormElement>) => void;
-  replyValue: string;
+  username: string;
+  placeholder: string;
+  comments: Comment[];
+  setComment: (value: SetStateAction<Comment[]>) => void;
+  commentId: number;
+  responseTo: string;
+  type: string;
 }
 
 export interface DeleteWarningProps {
   onCancel: () => void;
   onConfirm: () => void;
+}
+
+export interface ReplyProps {
+  userImage: string;
+  userName: string;
+  dateCreated: string;
+  commentContent: string;
+  commentScore: number;
+  user: string;
+  responseTo: string;
+  deleteComment: () => void;
+  addCommentImage: string;
+  placeholder: string;
+  setComment: (value: SetStateAction<Comment[]>) => void;
+  id: number;
+  comments: Comment[];
 }
