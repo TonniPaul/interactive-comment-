@@ -54,6 +54,7 @@ const AddComment = ({
 
     if (type === "comment") {
       const updatedComments = [...comments, nComment];
+
       setComment(updatedComments);
     } else {
       const updatedReplies = comments.map((comment) => {

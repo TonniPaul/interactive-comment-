@@ -46,7 +46,7 @@ export interface AddCommentProps {
   setComment: (value: SetStateAction<Comment[]>) => void;
   commentId: number;
   responseTo: string;
-  type: string;
+  type?: string;
 }
 
 export interface DeleteWarningProps {

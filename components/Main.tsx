@@ -57,7 +57,7 @@ const Main = () => {
               setComment={setComment}
               addCommentImage={currentUser.image.png}
               placeholder={"Add Reply...."}
-              id={0}
+              id={data.id}
               comments={comment}
             />
             <ReplyContainerStyle>

@@ -174,7 +174,6 @@ const ReplyCard = ({
           setComment={setComment}
           commentId={id}
           responseTo={responseTo}
-          type="reply"
         />
       )}
     </div>
