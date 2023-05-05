@@ -94,8 +94,7 @@ const Main = () => {
         username={currentUser.username}
         comments={comment}
         setComment={setComment}
-        commentId={0}
-        responseTo={""}
+        commentId={parseInt(crypto.randomBytes(16).toString("hex"))}
         type={"comment"}
       />
     </Container>

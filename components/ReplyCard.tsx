@@ -173,7 +173,6 @@ const ReplyCard = ({
           comments={comments}
           setComment={setComment}
           commentId={id}
-          responseTo={responseTo}
         />
       )}
     </div>

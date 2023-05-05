@@ -45,7 +45,6 @@ export interface AddCommentProps {
   comments: Comment[];
   setComment: (value: SetStateAction<Comment[]>) => void;
   commentId: number;
-  responseTo: string;
   type?: string;
 }
 

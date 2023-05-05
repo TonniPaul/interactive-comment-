@@ -11,7 +11,6 @@ const AddComment = ({
   setComment,
   username,
   commentId,
-  responseTo,
   type,
 }: AddCommentProps) => {
   const [value, setValue] = useState<string>("");
@@ -40,24 +39,23 @@ const AddComment = ({
       createdAt: "just now",
     };
 
-    const nReply = {
-      id: parseInt(crypto.randomBytes(16).toString("hex")),
-      content: value,
-      createdAt: "just now",
-      score: 0,
-      user: {
-        image: { png: image },
-        username: username,
-      },
-      replyingTo: responseTo,
-    };
-
     if (type === "comment") {
       const updatedComments = [...comments, nComment];
 
       setComment(updatedComments);
     } else {
       const updatedReplies = comments.map((comment) => {
+        const nReply = {
+          id: parseInt(crypto.randomBytes(16).toString("hex")),
+          content: value,
+          createdAt: "just now",
+          score: 0,
+          user: {
+            image: { png: image },
+            username: username,
+          },
+          replyingTo: comment.user.username,
+        };
         if (comment.id === commentId) {
           return { ...comment, replies: [...comment.replies, nReply] };
         }
